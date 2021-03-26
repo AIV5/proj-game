@@ -1,12 +1,8 @@
 #include "render.h"
 #include <glm/glm.hpp>
+#include "figure.h"
 
-using namespace glm;
-
-vec2 hr = {.5f * PGS_START_WINDOW_WIDTH, .5f * PGS_START_WINDOW_HEIGHT};
-
-//float hw = .5f * PGS_START_WINDOW_WIDTH;
-//float hh = .5f * PGS_START_WINDOW_HEIGHT;
+glm::vec2 hr = {.5f * PGS_START_WINDOW_WIDTH, .5f * PGS_START_WINDOW_HEIGHT};
 
 GLFWwindow* window;
 GLuint VAO;
@@ -39,18 +35,13 @@ void renderLoad () {
     GLuint pf_loc = glGetUniformLocation(prog, "playerF");
     glUniform4f(pf_loc, 0, 0, 0, 1);
 
-    GLuint point_loc = glGetUniformLocation(prog, "point");
-    glUniform4f(point_loc, 0, 0, 0, 1);
-
-    GLuint l1_loc = glGetUniformLocation(prog, "l1");
-    glUniform4f(l1_loc, 0, sin(0.05), 0, cos(0.05));
-
-    GLuint l2_loc = glGetUniformLocation(prog, "l2");
-    glUniform4f(l2_loc, 0, 0, 1, 0);
+    createFigure(glm::vec4(0, 0, 0, 1), glm::vec4(0, 1, .1, 0), glm::vec4(0, 1, 0, 1));
+    createFigure(glm::vec4(0, 0, 1, 0), glm::vec4(0, .5, .1, 1), glm::vec4(1, 0, 0, 1));
+    createFigure(BOUND, glm::vec4(0, 0, 0, 1), glm::vec4(0, 1, 0, 0), glm::vec4(0, 0, 1, 0), glm::vec4(1, 1, 0, 1), .2);
+    createFigure(glm::vec4(0, 0, .1, 1), glm::vec4(0, 0, 1, 1));
 }
 
 void renderLoop () {
-    glBindVertexArray(VAO);
     glDrawArrays(GL_QUADS, 0, 4);
 }
 
@@ -60,9 +51,7 @@ void sendResolution () {
 }
 
 void changeSize (GLFWwindow* _, int w, int h) {
-    hr = .5f * vec2(w, h);
-	//hw = .5f * w;
-	//hh = .5f * h;
+    hr = .5f * glm::vec2(w, h);
 	glViewport(0, 0, w, h);
 	sendResolution();
 }

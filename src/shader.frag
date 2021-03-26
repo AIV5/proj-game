@@ -1,32 +1,51 @@
 #version 460
 
-float pi = 3.1415926535;
+#define MAX_OBJECTS 32
+#define FULL 0
+#define LIMITED 1
+#define BOUND 2
+
+
+float pi = acos(0);
 float lambda = 1;
-float eps = 0.005;
+float eps = 0.004;
 
 out vec4 fragColor;
 
 uniform vec2 hr;
+uniform vec4 playerP, playerR, playerU, playerF; // position, right, up, forward
 
-uniform vec4 playerP, playerR, playerU, playerF;
+uniform int   objNumber;
+uniform int   [MAX_OBJECTS] objType;
+uniform mat4  [MAX_OBJECTS] objPM; // projection matrix
+uniform vec4  [MAX_OBJECTS] objColor;
+uniform vec4  [MAX_OBJECTS] objCenter;
+uniform float [MAX_OBJECTS] objRad;
 
-uniform vec4 point;
-
-uniform vec4 l1, l2;
-
-float distPoint (vec4 p, vec4 v) {
-    float t = abs(dot(p, v));
-	if (t > 1)
-		return 0;
-	return acos(t);
+float projDist1v (vec4 v) {
+    float len = length(v);
+    if (len > 1)
+        return 0;
+    return acos(len);
 }
 
-float distLine (vec4 v) {
-    vec4 acc = l1 * dot(l1, v) + l2 * dot(l2, v);
-	float n = length(acc);
-	if (n > 1)
-		return 0;
-	return acos(n);
+float projDist2v (vec4 a, vec4 b) {
+    float prod = abs(dot(a, b));
+    if (prod > 1)
+        return 0;
+    return acos(prod);
+}
+
+float projDist (vec4 v, int objIndex) {
+    vec4 p = objPM[objIndex] * v;   //  projection
+    if (objType[objIndex] == FULL)
+        return projDist1v(p);
+    vec4 n = normalize(p);          //  normalized projection
+    if (objType[objIndex] == LIMITED && projDist2v(n, objCenter[objIndex]) < objRad[objIndex])  //  if got inside the object
+        return projDist1v(p);
+    n = normalize(n - objCenter[objIndex] * dot(n, objCenter[objIndex]));   //  orthonormal addition to the center of the figure
+    n = objCenter[objIndex] * cos(objRad[objIndex]) + n * sin(objRad[objIndex]);    //  boundary point
+    return projDist2v(v, n);
 }
 
 void main () {
@@ -39,32 +58,23 @@ void main () {
         fragColor = vec4(0, 0, 0, 1);
         return;
     }
-    vec4 t;
-    int k = 0;
-    while (k < 500) {
-        t = cos(alpha) * playerP + sin(alpha) * look;
-        dCur = distPoint(point, t);
-        if (dCur < eps) {
-            fragColor = vec4(1, 0, 1, 1);
-            return;
+    vec4 explorer;
+    for (int k = 0; k < 500; ++k) {
+        explorer = cos(alpha) * playerP + sin(alpha) * look;
+        for (int objIndex = 0; objIndex < objNumber; ++objIndex) {
+            dCur = projDist(explorer, objIndex);
+            if (dCur < eps) {
+                fragColor = objColor[objIndex];
+                return;
+            }
+            if (dCur < dMin)
+                dMin = dCur;
         }
-        if (dCur < dMin)
-            dMin = dCur;
-
-        dCur = distLine(t);
-        if (dCur < eps) {
-            fragColor = vec4(0, 1, 0, 1);
-            return;
-        }
-        if (dCur < dMin)
-            dMin = dCur;
-
         alpha += dMin;
-        if (alpha > pi) {
+        if (alpha >= pi) {
             fragColor = vec4(.25, .25, .25, 1);
             return;
         }
-        ++k;
     }
-    fragColor = vec4(1, 0, 0, 1);
+    fragColor = vec4(1, 1, 1, 1);
 }

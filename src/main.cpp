@@ -5,7 +5,6 @@
 #include "settings.h"
 #include "render.h"
 
-extern float hw, hh;
 extern GLFWwindow* window;
 extern GLuint VAO, prog;
 

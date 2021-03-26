@@ -1,8 +1,12 @@
 #include "render.h"
-#include <cmath>
+#include <glm/glm.hpp>
 
-float hw = .5f * PGS_START_WINDOW_WIDTH;
-float hh = .5f * PGS_START_WINDOW_HEIGHT;
+using namespace glm;
+
+vec2 hr = {.5f * PGS_START_WINDOW_WIDTH, .5f * PGS_START_WINDOW_HEIGHT};
+
+//float hw = .5f * PGS_START_WINDOW_WIDTH;
+//float hh = .5f * PGS_START_WINDOW_HEIGHT;
 
 GLFWwindow* window;
 GLuint VAO;
@@ -52,12 +56,13 @@ void renderLoop () {
 
 void sendResolution () {
     GLuint hr_loc = glGetUniformLocation(prog, "hr");
-    glUniform2f(hr_loc, hw, hh);
+    glUniform2f(hr_loc, hr.x, hr.y);
 }
 
 void changeSize (GLFWwindow* _, int w, int h) {
-	hw = .5f * w;
-	hh = .5f * h;
+    hr = .5f * vec2(w, h);
+	//hw = .5f * w;
+	//hh = .5f * h;
 	glViewport(0, 0, w, h);
 	sendResolution();
 }

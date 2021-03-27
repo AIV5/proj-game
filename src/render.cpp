@@ -36,8 +36,9 @@ void renderLoad () {
     glUniform4f(pf_loc, 0, 0, 0, 1);
 
     createFigure(glm::vec4(0, 0, 0, 1), glm::vec4(0, 1, .1, 0), glm::vec4(0, 1, 0, 1));
-    createFigure(glm::vec4(0, 0, 1, 0), glm::vec4(0, .5, .1, 1), glm::vec4(1, 0, 0, 1));
-    createFigure(BOUND, glm::vec4(0, 0, 0, 1), glm::vec4(0, 1, 0, 0), glm::vec4(0, 0, 1, 0), glm::vec4(1, 1, 0, 1), .2);
+    createFigure(glm::vec4(0, 0, .2, 1), glm::vec4(0, .5, .1, 1), glm::vec4(1, 0, 0, 1));
+    createFigure(BOUND, glm::vec4(0, 0, 0, 1), glm::vec4(0.6, 0.4, 0, 0), glm::vec4(0, 0, 1, 0), glm::vec4(1, 1, 0, 1), .2);
+    createFigure(LIMITED, glm::vec4(0, 0, 0, 1), glm::vec4(0, 1, 0, 1), glm::vec4(0, 0, 1, 0), glm::vec4(1, 0, 1, 1), .1);
     createFigure(glm::vec4(0, 0, .1, 1), glm::vec4(0, 0, 1, 1));
 }
 

@@ -8,7 +8,7 @@
 
 float pi = acos(0);
 float lambda = 1;
-float eps = 0.004;
+float eps = 0.005;
 
 out vec4 fragColor;
 
@@ -40,10 +40,13 @@ float projDist (vec4 v, int objIndex) {
     vec4 p = objPM[objIndex] * v;   //  projection
     if (objType[objIndex] == FULL)
         return projDist1v(p);
+    if (length(p) == 0)
+        return pi;
     vec4 n = normalize(p);          //  normalized projection
     if (objType[objIndex] == LIMITED && projDist2v(n, objCenter[objIndex]) < objRad[objIndex])  //  if got inside the object
         return projDist1v(p);
-    n = normalize(n - objCenter[objIndex] * dot(n, objCenter[objIndex]));   //  orthonormal addition to the center of the figure
+    n = n - objCenter[objIndex] * dot(n, objCenter[objIndex]);   // !not!  orthonormal addition to the center of the figure
+    n = normalize(n);
     n = objCenter[objIndex] * cos(objRad[objIndex]) + n * sin(objRad[objIndex]);    //  boundary point
     return projDist2v(v, n);
 }
@@ -71,7 +74,7 @@ void main () {
                 dMin = dCur;
         }
         alpha += dMin;
-        if (alpha >= pi) {
+        if (alpha >= 4) {
             fragColor = vec4(.25, .25, .25, 1);
             return;
         }

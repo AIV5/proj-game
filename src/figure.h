@@ -6,6 +6,8 @@
 #include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
 
+#define PGS_MIN_VECTOR_LENGTH 0.001f
+
 enum _objType_t {FULL, LIMITED, BOUND};
 
 class Figure {

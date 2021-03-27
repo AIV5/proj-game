@@ -182,42 +182,42 @@ void modifyFigure(Figure &figure, int index) {
 
 int createFigure(glm::vec4 p, glm::vec4 color) {
     Figure figure = Figure(p, color);
-    registerFigure(figure);
+    return registerFigure(figure);
 }
 
 int createFigure(glm::vec4 p, glm::vec4 r, glm::vec4 color) {
     Figure figure = Figure(p, r, color);
-    registerFigure(figure);
+    return registerFigure(figure);
 }
 
 int createFigure(glm::vec4 p, glm::vec4 r, glm::vec4 u, glm::vec4 color) {
     Figure figure = Figure(p, r, u, color);
-    registerFigure(figure);
+    return registerFigure(figure);
 }
 
 int createFigure(glm::vec4 p, glm::vec4 r, glm::vec4 u, glm::vec4 f, glm::vec4 color) {
     Figure figure = Figure(p, r, u, f, color);
-    registerFigure(figure);
+    return registerFigure(figure);
 }
 
 int createFigure(_objType_t type, glm::vec4 p, glm::vec4 color, float rad) {
     Figure figure = Figure(type, p, color, rad);
-    registerFigure(figure);
+    return registerFigure(figure);
 }
 
 int createFigure(_objType_t type, glm::vec4 p, glm::vec4 r, glm::vec4 color, float rad) {
     Figure figure = Figure(type, p, r, color, rad);
-    registerFigure(figure);
+    return registerFigure(figure);
 }
 
 int createFigure(_objType_t type, glm::vec4 p, glm::vec4 r, glm::vec4 u, glm::vec4 color, float rad) {
     Figure figure = Figure(type, p, r, u, color, rad);
-    registerFigure(figure);
+    return registerFigure(figure);
 }
 
 int createFigure(_objType_t type, glm::vec4 p, glm::vec4 r, glm::vec4 u, glm::vec4 f, glm::vec4 color, float rad) {
     Figure figure = Figure(type, p, r, u, f, color, rad);
-    registerFigure(figure);
+    return registerFigure(figure);
 }
 
 

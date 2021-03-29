@@ -45,8 +45,8 @@ float projDist (vec4 v, int objIndex) {
     vec4 n = normalize(p);          //  normalized projection
     if (objType[objIndex] == LIMITED && projDist2v(n, objCenter[objIndex]) < objRad[objIndex])  //  if got inside the object
         return projDist1v(p);
-    n = n - objCenter[objIndex] * dot(n, objCenter[objIndex]);   // !not!  orthonormal addition to the center of the figure
-    n = normalize(n);
+    n = n - objCenter[objIndex] * dot(n, objCenter[objIndex]);
+    n = normalize(n);   // orthonormal addition to the center of the figure
     n = objCenter[objIndex] * cos(objRad[objIndex]) + n * sin(objRad[objIndex]);    //  boundary point
     return projDist2v(v, n);
 }

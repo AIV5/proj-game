@@ -1,6 +1,10 @@
-#include "render.h"
 #include <glm/glm.hpp>
+#include "render.h"
 #include "figure.h"
+#include "shaderManager.h"
+
+using glm::vec3;
+using glm::vec4;
 
 glm::vec2 hr = {.5f * PGS_START_WINDOW_WIDTH, .5f * PGS_START_WINDOW_HEIGHT};
 
@@ -8,7 +12,14 @@ GLFWwindow* window;
 GLuint VAO;
 GLuint prog;
 
+void test () {
+    glm::mat4 m;
+    glm::vec4 v;
+    std::cout << "test: " << sizeof(m) << " " << sizeof(v) << "\n";
+}
+
 void renderLoad () {
+    test();
     float point[] = {1,1, 1,-1, -1,-1, -1,1};
 
     GLuint pointsVBO;
@@ -35,11 +46,14 @@ void renderLoad () {
     GLuint pf_loc = glGetUniformLocation(prog, "playerF");
     glUniform4f(pf_loc, 0, 0, 0, 1);
 
-    createFigure(glm::vec4(0, 0, 0, 1), glm::vec4(0, 1, .1, 0), glm::vec4(0, 1, 0, 1));
-    createFigure(glm::vec4(0, 0, .2, 1), glm::vec4(0, .5, .1, 1), glm::vec4(1, 0, 0, 1));
-    createFigure(BOUND, glm::vec4(0, 0, 0, 1), glm::vec4(0.6, 0.4, 0, 0), glm::vec4(0, 0, 1, 0), glm::vec4(1, 1, 0, 1), .2);
-    createFigure(LIMITED, glm::vec4(0, 0, 0, 1), glm::vec4(0, 1, 0, 1), glm::vec4(0, 0, 1, 0), glm::vec4(1, 0, 1, 1), .1);
-    createFigure(glm::vec4(0, 0, .1, 1), glm::vec4(0, 0, 1, 1));
+    Figure dot = Figure(vec3(1, 0, 1), vec4(0, 0, 0.1, 1));
+    regFig(dot);
+    Figure red_line = Figure(vec3(1, 0, 0), vec4(0, 0, 0.3, 1), vec4(0, 1, 0.1, 0));
+    regFig(red_line);
+    Figure green_line = Figure(vec3(0, 1, 0), vec4(0.1, 0, 0.3, .5), vec4(0, .1, 0.4, 1));
+    regFig(green_line);
+    Figure yellow_circle = Figure(BOUND, 0.3, vec3(1, 1, 0), vec4(0, 0, -0.1, 1), vec4(.7, 0, .7, 0), vec4(0, 1, 0, 0));
+    regFig(yellow_circle);
 }
 
 void renderLoop () {

@@ -6,8 +6,8 @@ project(${PROJECT_NAME})
 add_executable(${PROJECT_NAME}
             src/main.cpp
             src/settings.h
-            src/shaderloader.cpp
-            src/shaderloader.h
+            src/shaderManager.cpp
+            src/shaderManager.h
             src/render.cpp
             src/render.h
             src/figure.cpp

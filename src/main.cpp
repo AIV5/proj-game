@@ -1,10 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include "shaderloader.h"
+#include "shaderManager.h"
 #include "settings.h"
 #include "render.h"
-#include "figure.h"
 
 extern GLFWwindow* window;
 extern GLuint VAO, prog;

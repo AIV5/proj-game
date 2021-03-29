@@ -1,9 +1,6 @@
 #pragma once
 
-#include <iostream>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
+#include <glm/glm.hpp>
 
 #define PGS_MIN_VECTOR_LENGTH 0.001f
 

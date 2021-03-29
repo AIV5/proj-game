@@ -1,3 +1,8 @@
+#include <cstdio>
+#include <cstring>
+#include <iostream>
+#include <glad/glad.h>
+#include "settings.h"
 #include "shaderManager.h"
 
 extern GLuint prog;
@@ -112,4 +117,15 @@ void modFig (Figure &figure, int index) {
     glUniform4f(objColorLoc, figure.objColor[0], figure.objColor[1], figure.objColor[2], 1);
     glUniform4fv(objCenterLoc, 1, &figure.objCoord[0][0]);
     glUniform1f(objRadLoc, figure.objRad);
+}
+
+void setPlayer (glm::mat4 coord) {
+    GLuint PLoc = glGetUniformLocation(prog, "playerP");
+    GLuint RLoc = glGetUniformLocation(prog, "playerR");
+    GLuint ULoc = glGetUniformLocation(prog, "playerU");
+    GLuint FLoc = glGetUniformLocation(prog, "playerF");
+    glUniform4fv(PLoc, 1, &coord[0][0]);
+    glUniform4fv(RLoc, 1, &coord[1][0]);
+    glUniform4fv(ULoc, 1, &coord[2][0]);
+    glUniform4fv(FLoc, 1, &coord[3][0]);
 }

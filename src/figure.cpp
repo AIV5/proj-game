@@ -1,3 +1,4 @@
+#include <iostream>
 #include "figure.h"
 
 void _errorMinVectorLength () {

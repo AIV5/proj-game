@@ -1,66 +1,36 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <iostream>
-#include "shaderManager.h"
-#include "settings.h"
+#include <glm/glm.hpp>
 #include "render.h"
+#include "shaderManager.h"
 
 extern GLFWwindow* window;
-extern GLuint VAO, prog;
+using glm::vec3, glm::vec4, glm::mat4;
+
+mat4 player = mat4(1);
 
 
 void init (void) {
-    /* Initialize the library */
-    if (!glfwInit())
-        exit(-1);
-
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(PGS_START_WINDOW_WIDTH, PGS_START_WINDOW_HEIGHT, "Projective Game", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        exit(-1);
-    }
-
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
-
-
-    if (!gladLoadGL()) {
-        std::cout << "Can't load glad\n";
-        exit(-1);
-    }
-
-    std::cout << "OpenGL " << GLVersion.major << "." << GLVersion.minor << '\n';
-
-    glfwSetWindowSizeCallback(window, changeSize);
-
-    prog = loadProgram();
-    glUseProgram(prog);
-    sendResolution();
-    renderLoad();
+    renderLoad();   // this must be the first, I think
+    setPlayer(player);
+    Figure dot = Figure(vec3(1, 0, 1), vec4(0, 0, 0.1, 1));
+    regFig(dot);
+    Figure red_line = Figure(vec3(1, 0, 0), vec4(0, 0, 0.3, 1), vec4(0, 1, 0.1, 0));
+    regFig(red_line);
+    Figure green_line = Figure(vec3(0, 1, 0), vec4(0.1, 0, 0.3, .5), vec4(0, .1, 0.4, 1));
+    regFig(green_line);
+    Figure yellow_circle = Figure(BOUND, 0.3, vec3(1, 1, 0), vec4(0, 0, -0.1, 1), vec4(.7, 0, .7, 0), vec4(0, 1, 0, 0));
+    regFig(yellow_circle);
 }
 
 void loop (void) {
-    /* Render here */
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    renderLoop();
-
-    /* Swap front and back buffers */
-    glfwSwapBuffers(window);
-
-    /* Poll for and process events */
-    glfwPollEvents();
+    renderLoop();   // this must be the last, I think
 }
 
 int main(void)
 {
     init();
-
-    /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
-    {
+    while (!exitCondition()) {
         loop();
     }
 

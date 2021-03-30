@@ -41,7 +41,7 @@ float projDist (vec4 v, int objIndex) {
     if (objType[objIndex] == FULL)
         return projDist1v(p);
     if (length(p) == 0)
-        return pi;
+        return pi / 2;
     vec4 n = normalize(p);          //  normalized projection
     if (objType[objIndex] == LIMITED && projDist2v(n, objCenter[objIndex]) < objRad[objIndex])  //  if got inside the object
         return projDist1v(p);

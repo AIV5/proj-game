@@ -4,21 +4,25 @@
 
 #define PGS_MIN_VECTOR_LENGTH 0.001f
 
+using glm::fvec3;
+using glm::dvec4;
+using glm::dmat4;
+
 enum _objType_t {FULL, LIMITED, BOUND};
-const glm::vec4 nullVec = glm::vec4(0, 0, 0, 0);
+const dvec4 nullVec = dvec4(0, 0, 0, 0);
 
 class Figure {
 private:
-    void init (glm::vec3 color, glm::vec4 p, glm::vec4 r, glm::vec4 u, glm::vec4 f);
+    void init (fvec3 color, dvec4 p, dvec4 r, dvec4 u, dvec4 f);
 public:
     int objIndex;
     int objType;
-    glm::vec3 objColor;
-    float objRad;
-    glm::vec4 objCoord[4];
+    fvec3 objColor;
+    double objRad;
+    dmat4 objCoord;
     Figure(void);
-    Figure(glm::vec3 color, glm::vec4 p, glm::vec4 r=nullVec, glm::vec4 u=nullVec, glm::vec4 f=nullVec);
-    Figure(_objType_t type, float rad, glm::vec3 color, glm::vec4 p, glm::vec4 r=nullVec, glm::vec4 u=nullVec, glm::vec4 f=nullVec);
+    Figure(fvec3 color, dvec4 p, dvec4 r=nullVec, dvec4 u=nullVec, dvec4 f=nullVec);
+    Figure(_objType_t type, double rad, fvec3 color, dvec4 p, dvec4 r=nullVec, dvec4 u=nullVec, dvec4 f=nullVec);
 };
 
-glm::vec4 orthonormal (glm::vec4 f, glm::vec4 u=nullVec, glm::vec4 r=nullVec, glm::vec4 p=nullVec);
+dvec4 orthonormal (dvec4 f, dvec4 u=nullVec, dvec4 r=nullVec, dvec4 p=nullVec);

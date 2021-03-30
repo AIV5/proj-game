@@ -63,14 +63,14 @@ GLuint getArrayLoc (char* name, int index) {
     return glGetUniformLocation(prog, text);
 }
 
-void printMatrix (glm::mat4 m) {
+void printMatrix (dmat4 m) {
     std::cout << m[0][0] << ' ' << m[1][0] << ' ' << m[2][0] << ' ' << m[3][0] << '\n';
     std::cout << m[0][1] << ' ' << m[1][1] << ' ' << m[2][1] << ' ' << m[3][1] << '\n';
     std::cout << m[0][2] << ' ' << m[1][2] << ' ' << m[2][2] << ' ' << m[3][2] << '\n';
     std::cout << m[0][3] << ' ' << m[1][3] << ' ' << m[2][3] << ' ' << m[3][3] << '\n';
 }
 
-void printVector (glm::vec4 v) {
+void printVector (dvec4 v) {
     std::cout << v[0] << ' ' << v[1] << ' ' << v[2] << ' ' << v[3] << '\n';
 }
 
@@ -85,12 +85,14 @@ int regFig (Figure &figure) {
     ++objCount;
     glUniform1i(objNumberLoc, objCount);
     glUniform1i(objTypeLoc, figure.objType);
-    glm::mat4 basis = glm::mat4(figure.objCoord[0], figure.objCoord[1], figure.objCoord[2], figure.objCoord[3]);
-    glm::mat4 PM = basis * glm::transpose(basis);
-    glUniformMatrix4fv(objPMLoc, 1, GL_FALSE, &PM[0][0]);
+    dmat4 basis = figure.objCoord;
+    dmat4 PM = basis * glm::transpose(basis);
+    fmat4 fPM = fmat4 (PM);
+    glUniformMatrix4fv(objPMLoc, 1, GL_FALSE, &fPM[0][0]);
     glUniform4f(objColorLoc, figure.objColor[0], figure.objColor[1], figure.objColor[2], 1);
-    glUniform4fv(objCenterLoc, 1, &figure.objCoord[0][0]);
-    glUniform1f(objRadLoc, figure.objRad);
+    fvec4 center = fvec4 (figure.objCoord[0]);
+    glUniform4fv(objCenterLoc, 1, &center[0]);
+    glUniform1f(objRadLoc, (float)figure.objRad);
 
     std::cout << "figure: " << figure.objIndex << "\n";
 
@@ -113,23 +115,29 @@ void modFig (Figure &figure, int index) {
     GLuint objColorLoc = getArrayLoc("objColor", index);
     GLuint objCenterLoc = getArrayLoc("objCenter", index);
     GLuint objRadLoc = getArrayLoc("objRad", index);
-    glUniform1i(objNumberLoc, objCount);
     glUniform1i(objTypeLoc, figure.objType);
-    glm::mat4 basis = glm::mat4(figure.objCoord[0], figure.objCoord[1], figure.objCoord[2], figure.objCoord[3]);
-    glm::mat4 PM = basis * glm::transpose(basis);
-    glUniformMatrix4fv(objPMLoc, 1, GL_FALSE, &PM[0][0]);
+    glUniform1i(objTypeLoc, figure.objType);
+    dmat4 basis = figure.objCoord;
+    dmat4 PM = basis * glm::transpose(basis);
+    fmat4 fPM = fmat4 (PM);
+    glUniformMatrix4fv(objPMLoc, 1, GL_FALSE, &fPM[0][0]);
     glUniform4f(objColorLoc, figure.objColor[0], figure.objColor[1], figure.objColor[2], 1);
-    glUniform4fv(objCenterLoc, 1, &figure.objCoord[0][0]);
-    glUniform1f(objRadLoc, figure.objRad);
+    fvec4 center = fvec4 (figure.objCoord[0]);
+    glUniform4fv(objCenterLoc, 1, &center[0]);
+    glUniform1f(objRadLoc, (float)figure.objRad);
 }
 
-void setPlayer (glm::mat4 coord) {
+void setPlayer (dmat4 coord) {
     GLuint PLoc = glGetUniformLocation(prog, "playerP");
     GLuint RLoc = glGetUniformLocation(prog, "playerR");
     GLuint ULoc = glGetUniformLocation(prog, "playerU");
     GLuint FLoc = glGetUniformLocation(prog, "playerF");
-    glUniform4fv(PLoc, 1, &coord[0][0]);
-    glUniform4fv(RLoc, 1, &coord[1][0]);
-    glUniform4fv(ULoc, 1, &coord[2][0]);
-    glUniform4fv(FLoc, 1, &coord[3][0]);
+    fvec4 Pf = fvec4 (coord[0]);
+    fvec4 Rf = fvec4 (coord[1]);
+    fvec4 Uf = fvec4 (coord[2]);
+    fvec4 Ff = fvec4 (coord[3]);
+    glUniform4fv(PLoc, 1, &Pf[0]);
+    glUniform4fv(RLoc, 1, &Rf[0]);
+    glUniform4fv(ULoc, 1, &Uf[0]);
+    glUniform4fv(FLoc, 1, &Ff[0]);
 }

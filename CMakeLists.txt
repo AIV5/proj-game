@@ -12,6 +12,8 @@ add_executable(${PROJECT_NAME}
             src/render.h
             src/figure.cpp
             src/figure.h
+            src/inputs.cpp
+            src/inputs.h
             )
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)

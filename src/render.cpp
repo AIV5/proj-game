@@ -4,7 +4,7 @@
 #include "figure.h"
 #include "shaderManager.h"
 
-glm::vec2 hr = {.5f * PGS_START_WINDOW_WIDTH, .5f * PGS_START_WINDOW_HEIGHT};
+glm::dvec2 hr = {.5 * PGS_START_WINDOW_WIDTH, .5 * PGS_START_WINDOW_HEIGHT};
 
 GLFWwindow* window;
 GLuint VAO, prog;
@@ -48,25 +48,15 @@ void renderLoop () {
 
 void sendResolution () {
     GLuint hr_loc = glGetUniformLocation(prog, "hr");
-    glUniform2f(hr_loc, hr.x, hr.y);
+    glUniform2f(hr_loc, (float)hr.x, (float)hr.y);
 }
 
 void changeSize (GLFWwindow* _, int w, int h) {
-    hr = .5f * glm::vec2(w, h);
+    hr = .5 * glm::dvec2(w, h);
 	glViewport(0, 0, w, h);
 	sendResolution();
 }
 
 bool exitCondition () {
     return glfwWindowShouldClose(window);
-}
-
-float getMov(vec3 &ax) {
-    ax = vec3(1, 0, 0);
-    return 0.1;
-}
-
-float getRot(vec3 &ax) {
-    ax = vec3(0, 1, 0);
-    return 0.1;
 }

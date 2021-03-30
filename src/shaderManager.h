@@ -13,3 +13,4 @@ void modFig (Figure &figure, int index);
 void setPlayer (glm::mat4 coord);
 
 void printMatrix (glm::mat4 m);
+void printVector (glm::vec4 m);

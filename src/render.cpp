@@ -60,3 +60,13 @@ void changeSize (GLFWwindow* _, int w, int h) {
 bool exitCondition () {
     return glfwWindowShouldClose(window);
 }
+
+float getMov(vec3 &ax) {
+    ax = vec3(1, 0, 0);
+    return 0.1;
+}
+
+float getRot(vec3 &ax) {
+    ax = vec3(0, 1, 0);
+    return 0.1;
+}

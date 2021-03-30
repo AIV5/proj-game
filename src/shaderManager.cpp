@@ -70,6 +70,10 @@ void printMatrix (glm::mat4 m) {
     std::cout << m[0][3] << ' ' << m[1][3] << ' ' << m[2][3] << ' ' << m[3][3] << '\n';
 }
 
+void printVector (glm::vec4 v) {
+    std::cout << v[0] << ' ' << v[1] << ' ' << v[2] << ' ' << v[3] << '\n';
+}
+
 int regFig (Figure &figure) {
     figure.objIndex = objCount;
     GLuint objNumberLoc = glGetUniformLocation(prog, "objNumber");

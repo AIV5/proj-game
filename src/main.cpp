@@ -1,14 +1,15 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include <ctime>
+#include <random>
+#include <chrono>
 #include <iostream>
 #include "render.h"
 #include "shaderManager.h"
 #include "inputs.h"
 
 extern GLFWwindow* window;
-using glm::vec3;
+using glm::fvec3;
 using glm::dvec3;
 using glm::dvec4;
 using glm::dmat4;
@@ -18,7 +19,7 @@ double deltaTime = 0;
 
 dmat4 movMat () {
     dvec3 ax;
-    double a = getMov(ax);// * deltaTime;
+    double a = getMov(ax) * deltaTime;
     if (a == 0)
         return dmat4(1);
     double c = cos(a);
@@ -34,7 +35,7 @@ dmat4 movMat () {
 
 dmat4 rotMat () {
     dvec3 ax;
-    double a = getRot(ax);// * deltaTime;
+    double a = getRot(ax) * deltaTime;
     double c = cos(a);
     double v = 1 - c;
     double s = sin(a);
@@ -60,9 +61,37 @@ void repair (dmat4 &m) {
     m[3] = normalize(m[3] - m[0] * dot(m[0], m[3]) - m[1] * dot(m[1], m[3]) - m[2] * dot(m[2], m[3]));
 }
 
+double drand() {
+    return (double) (2 * rand() - 1) / RAND_MAX;
+}
+
+double prand() {
+    return (double) rand() / RAND_MAX / 4;
+}
+
+fvec3 rand3() {
+    return glm::normalize(fvec3(prand(), prand(), prand()));
+}
+
+dvec4 rand4() {
+    return glm::normalize(dvec4(drand(), drand(), drand(), drand()));
+}
+
 void init (void) {
     renderLoad();   // this must be the first, I think
     glfwSetKeyCallback(window, keyCallback);
+    srand(42);
+    for (int i = 0; i < 3; ++i) {
+        Figure dot = Figure(rand3(), rand4());
+        regFig(dot);
+        Figure line = Figure(rand3(), rand4(), rand4());
+        regFig(line);
+        Figure circle = Figure(BOUND, prand(), rand3(), rand4(), rand4(), rand4());
+        regFig(circle);
+        Figure sphere = Figure(LIMITED, prand(), rand3(), rand4(), rand4(), rand4(), rand4());
+        regFig(sphere);
+    }
+    /*
     Figure dot = Figure(vec3(1, 0, 1), dvec4(0, 0, 0.1, 1));
     regFig(dot);
     Figure red_line = Figure(vec3(1, 0, 0), dvec4(0, 0, 0.3, 1), dvec4(0, 1, 0.1, 0));
@@ -71,11 +100,11 @@ void init (void) {
     regFig(green_line);
     Figure yellow_circle = Figure(BOUND, 0.3, vec3(1, 1, 0), dvec4(0, 0, -0.1, 1), dvec4(.7, 0, .7, 0), dvec4(0, 1, 0, 0));
     regFig(yellow_circle);
+    */
 }
 
 void loop (void) {
-    time_t ts, te;
-    time(&ts);
+    auto begin = std::chrono::high_resolution_clock::now();
     player = rotMat() * player;
     repair(player);
     player = movMat() * player;
@@ -83,8 +112,10 @@ void loop (void) {
     setPlayer(player);
     flushKeys();
     renderLoop();   // this must be the last, I think
-    time(&te);
-    deltaTime = difftime(te, ts);
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed_ms = std::chrono::duration<double>(end - begin);
+    deltaTime = std::chrono::duration<double>(elapsed_ms).count();
+    // std::cout << "fps: " << 1/deltaTime << '\n';
     //sleep(1);
     /*
     std::cout << '\n';

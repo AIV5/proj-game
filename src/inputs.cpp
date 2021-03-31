@@ -55,7 +55,7 @@ double getMov(dvec3 &ax) {
     if (glm::length(ax) == 0)
         return 0;
     ax = glm::normalize(ax);
-    return 0.03;
+    return .5;
 }
 
 double getRot(dvec3 &ax) {
@@ -63,5 +63,5 @@ double getRot(dvec3 &ax) {
     if (glm::length(ax) == 0)
         return 0;
     ax = glm::normalize(ax);
-    return 0.03;
+    return .5;
 }
